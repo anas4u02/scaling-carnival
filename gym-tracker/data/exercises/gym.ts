@@ -1,4 +1,5 @@
 import type { GymExercise, MuscleGroup } from "@/types";
+import { media } from "./media";
 
 export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
   chest: [
@@ -14,6 +15,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 10–12",
       priority: false,
       note: "Master form before progressing. Neutral neck, core braced, straight line from knees to head.",
+      media: media.kneePushUps,
     },
     {
       id: "gc2",
@@ -27,6 +29,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 10–15",
       priority: false,
       note: "Stop if right arm tingling appears. Neutral neck throughout — don't crane or drop.",
+      media: media.fullPushUps,
     },
     {
       id: "gc3",
@@ -40,6 +43,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 12",
       priority: false,
       note: "Feet flat on floor, mild natural arch only. Dumbbells preferred over barbell for shoulder control.",
+      media: media.flatDbPress,
     },
     {
       id: "gc4",
@@ -53,6 +57,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 12",
       priority: false,
       note: "Same form as flat. Dumbbells give better shoulder control during the cervical recovery period.",
+      media: media.inclineDbPress,
     },
     {
       id: "gc5",
@@ -66,6 +71,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 12–15",
       priority: false,
       note: "Low spinal load, excellent isolation. Full range of motion with controlled tempo.",
+      media: media.cableFlyes,
     },
     {
       id: "gc6",
@@ -79,6 +85,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 8–10",
       priority: false,
       note: "Only when DB press is fully stable. No extreme powerlifter arch. Neck neutral throughout.",
+      media: media.barbellPress,
     },
   ],
   shoulders: [
@@ -94,6 +101,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 15–20",
       priority: true,
       note: "EVERY session without exception. Always the first exercise. Eye-height cable, rope attachment, elbows flared high.",
+      media: media.facePulls,
     },
     {
       id: "gs2",
@@ -107,6 +115,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 20",
       priority: true,
       note: "Light band. Can do daily. Direct correction for forward shoulder posture driving your cervical issues.",
+      media: media.bandPullAparts,
     },
     {
       id: "gs3",
@@ -120,6 +129,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 15",
       priority: true,
       note: "2–3 kg. Elbow fixed at 90° at side. Rotate forearm only. C5 nerve root recovery exercise.",
+      media: media.externalRotation,
     },
     {
       id: "gs4",
@@ -133,6 +143,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 15",
       priority: false,
       note: "Don't shrug — weight too heavy if shrugging. Raise to shoulder height. Zero cervical loading.",
+      media: media.lateralRaises,
     },
     {
       id: "gs5",
@@ -146,6 +157,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 15",
       priority: true,
       note: "Reverse pec deck or bent-over DB. Fixes the posterior shoulder weakness driving your symptoms.",
+      media: media.rearDeltFlyes,
     },
     {
       id: "gs6",
@@ -159,6 +171,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "2 sets × 10 each",
       priority: true,
       note: "2–3 kg on incline bench. Y, T, W positions. Precision muscles — don't add load.",
+      media: media.ytwRaises,
     },
     {
       id: "gs7",
@@ -172,6 +185,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 10",
       priority: false,
       note: "Trains lower trapezius. Back to wall, maintain contact of forearms and hands throughout.",
+      media: media.wallSlides,
     },
     {
       id: "gs8",
@@ -185,6 +199,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "2 sets × 12",
       priority: false,
       note: "Light only. Stop immediately if right arm tingling increases.",
+      media: media.frontRaises,
     },
     {
       id: "gs9",
@@ -198,6 +213,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 10–12",
       priority: false,
       note: "In front of head ONLY. Light-moderate weight. Sit tall. Stop if tingling. Never heavy, never behind neck.",
+      media: media.seatedShoulderPress,
     },
   ],
   biceps: [
@@ -213,6 +229,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 12",
       priority: false,
       note: "Core braced throughout. No back-swinging — that's lumbar load. Controlled tempo.",
+      media: media.dbCurl,
     },
     {
       id: "gbi2",
@@ -226,6 +243,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 12",
       priority: false,
       note: "Neutral grip. Easier on shoulder and forearm. Good choice during cervical recovery.",
+      media: media.hammerCurl,
     },
     {
       id: "gbi3",
@@ -239,6 +257,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 12",
       priority: false,
       note: "Consistent tension throughout range. 2 sec up, 2 sec down. No swinging.",
+      media: media.cableCurl,
     },
     {
       id: "gbi4",
@@ -252,6 +271,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 10",
       priority: false,
       note: "Slight stretch at bottom. Keep shoulders relaxed — don't let them roll forward under load.",
+      media: media.inclineCurl,
     },
     {
       id: "gbi5",
@@ -265,6 +285,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 10",
       priority: false,
       note: "Keep spine neutral over pad. Moderate weight.",
+      media: media.preacherCurl,
     },
   ],
   triceps: [
@@ -280,6 +301,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 10",
       priority: false,
       note: "Elbows close to body. Natural tricep emphasis. Neutral neck.",
+      media: media.closeGripPushUps,
     },
     {
       id: "gt2",
@@ -293,6 +315,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 12–15",
       priority: false,
       note: "Best tricep choice for your condition. Standing, neutral spine, forearms parallel to floor at start.",
+      media: media.tricepPushdown,
     },
     {
       id: "gt3",
@@ -306,6 +329,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 12",
       priority: false,
       note: "Supported on bench — removes lumbar load. Upper arm parallel to floor throughout.",
+      media: media.tricepKickback,
     },
     {
       id: "gt4",
@@ -319,6 +343,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 12",
       priority: false,
       note: "Rope allows wrist rotation at bottom for full contraction.",
+      media: media.tricepPushdown,
     },
     {
       id: "gt5",
@@ -332,6 +357,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 12",
       priority: false,
       note: "LIGHT weight only. Arms near cervical spine — stop immediately if right arm tingling occurs.",
+      media: media.overheadTricep,
     },
     {
       id: "gt6",
@@ -345,6 +371,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 10",
       priority: false,
       note: "Only in Phase 4 when cervical flare fully settled. Light-moderate weight only.",
+      media: media.skullCrushers,
     },
   ],
   back: [
@@ -360,6 +387,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 15–20",
       priority: true,
       note: "Always first in every session. Eye-height cable, rope attachment. Most important exercise.",
+      media: media.facePulls,
     },
     {
       id: "gbk2",
@@ -373,6 +401,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 15 × 5 sec",
       priority: true,
       note: "No equipment. Squeeze shoulder blades together and down. Hold each rep. Foundation for all back work.",
+      media: media.scapularRetraction,
     },
     {
       id: "gbk3",
@@ -386,6 +415,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 10–12",
       priority: true,
       note: "FRONT only — never behind neck. Pull to upper chest. Lean slightly back. Squeeze blades down and together.",
+      media: media.latPulldown,
     },
     {
       id: "gbk4",
@@ -399,6 +429,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 10–12",
       priority: true,
       note: "Upright torso. Pull to lower chest. Squeeze at end. Don't lean back excessively. Best compound back choice.",
+      media: media.seatedCableRow,
     },
     {
       id: "gbk5",
@@ -412,6 +443,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 10–12",
       priority: false,
       note: "Chest pad removes all lumbar load. Use whenever lower back feels fatigued.",
+      media: media.chestSupportedRow,
     },
     {
       id: "gbk6",
@@ -425,6 +457,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × Max",
       priority: false,
       note: "Neutral grip preferred. Neutral neck — don't crane back to look at bar. Hanging gently decompresses lumbar.",
+      media: media.pullUps,
     },
     {
       id: "gbk7",
@@ -438,6 +471,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 10",
       priority: false,
       note: "Knee and hand on bench. Neutral spine. Pull toward hip, not shoulder.",
+      media: media.oneArmRow,
     },
     {
       id: "gbk8",
@@ -451,6 +485,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 8",
       priority: false,
       note: "Physio clearance required first. Start very light. Upright torso, more leg drive. Safer than conventional.",
+      media: media.trapBarDeadlift,
     },
   ],
   legs: [
@@ -466,6 +501,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 15",
       priority: true,
       note: "Pillow between knees. Drive through heels. Squeeze glutes at top — if feeling it in lower back, glutes not firing.",
+      media: media.gluteBridge,
     },
     {
       id: "gl2",
@@ -479,6 +515,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 15",
       priority: false,
       note: "Feet shoulder-width, toes slightly out. Sit back like into a chair. Chest up throughout.",
+      media: media.bodyweightSquat,
     },
     {
       id: "gl3",
@@ -492,6 +529,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 15/side",
       priority: false,
       note: "Side-lying, knees bent, hips stacked. Rotate top knee upward. Glute medius activation for pelvic stability.",
+      media: media.clamshells,
     },
     {
       id: "gl4",
@@ -505,6 +543,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 12",
       priority: false,
       note: "Seated or prone. Minimal spinal loading. Controlled movement, no jerking.",
+      media: media.legCurl,
     },
     {
       id: "gl5",
@@ -518,6 +557,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 12",
       priority: false,
       note: "Seated — safe for spine. Controlled movement, don't snap into full extension.",
+      media: media.legExtension,
     },
     {
       id: "gl6",
@@ -531,6 +571,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 12",
       priority: false,
       note: "DB held at chest. Squat to parallel. Weight at chest significantly reduces lumbar load vs barbell.",
+      media: media.gobletSquat,
     },
     {
       id: "gl7",
@@ -544,6 +585,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 10/side",
       priority: false,
       note: "One leg extended, bridge on the other. Much harder than two-leg version. Build stability first.",
+      media: media.singleLegBridge,
     },
     {
       id: "gl8",
@@ -557,6 +599,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 10–12",
       priority: false,
       note: "Back stays fully against pad — if it peels off, you've gone too deep. Don't lock knees at top.",
+      media: media.legPress,
     },
     {
       id: "gl9",
@@ -570,6 +613,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 10/side",
       priority: false,
       note: "Torso upright. Front knee tracks over second toe. No barbell until Phase 4.",
+      media: media.lunge,
     },
     {
       id: "gl10",
@@ -583,6 +627,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 15",
       priority: true,
       note: "Shoulders on bench, feet flat, knees bent. Drive hips up explosively. Squeeze glutes hard at top. Foundation for loaded version.",
+      media: media.hipThrust,
     },
     {
       id: "gl11",
@@ -596,6 +641,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 12",
       priority: false,
       note: "Low cable between legs. Hip hinge movement. Teaches the deadlift pattern safely with zero spinal shear.",
+      media: media.cablePullThrough,
     },
     {
       id: "gl12",
@@ -609,6 +655,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 10/side",
       priority: false,
       note: "Rear foot on bench, controlled descent. Perfect form before adding any weight.",
+      media: media.bulgarianSplitSquat,
     },
     {
       id: "gl13",
@@ -622,6 +669,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "4 sets × 12",
       priority: true,
       note: "Progressive load increase over weeks. Safest loaded exercise for L5-S1 long term.",
+      media: media.hipThrust,
     },
     {
       id: "gl14",
@@ -635,6 +683,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 8",
       priority: false,
       note: "Physio clearance required. Start very light. Most spine-friendly deadlift variation — upright torso.",
+      media: media.trapBarDeadlift,
     },
     {
       id: "gl15",
@@ -648,6 +697,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 10/side",
       priority: false,
       note: "Add dumbbells only when bodyweight version is fully stable and controlled.",
+      media: media.bulgarianSplitSquat,
     },
   ],
   core: [
@@ -663,6 +713,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 15",
       priority: false,
       note: "Lying on back, knees bent. Gently press lower back into floor. Hold 3 sec. Foundational daily exercise.",
+      media: media.pelvicTilt,
     },
     {
       id: "gco2",
@@ -676,6 +727,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 10/side",
       priority: true,
       note: "Opposite arm and leg. Hold 5 sec. Return slowly. Most important core exercise for L5-S1. Do daily.",
+      media: media.birdDog,
     },
     {
       id: "gco3",
@@ -689,6 +741,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 10/side",
       priority: true,
       note: "Arms up, knees at 90°. Lower opposite arm and leg to floor slowly. Lower back stays flat — if it arches, shorten the range.",
+      media: media.deadBug,
     },
     {
       id: "gco4",
@@ -702,6 +755,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 20–30 sec",
       priority: true,
       note: "Hips level — don't sag or pike. Build to 60 sec over 4 weeks. A shorter correct plank > longer sagging plank.",
+      media: media.forearmPlank,
     },
     {
       id: "gco5",
@@ -715,6 +769,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 20 sec/side",
       priority: false,
       note: "Knee version first. Lateral stabilizers — essential for L5-S1 stability.",
+      media: media.sidePlank,
     },
     {
       id: "gco6",
@@ -728,6 +783,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 8",
       priority: false,
       note: "Hands under lower back (maintains curve). One knee bent. Lift head and shoulders only — NOT a crunch.",
+      media: media.mcgillCurlUp,
     },
     {
       id: "gco7",
@@ -741,6 +797,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 30–45 sec/side",
       priority: false,
       note: "Progress from knee version. Feet stacked or staggered. Add shoulder taps for difficulty.",
+      media: media.sidePlank,
     },
     {
       id: "gco8",
@@ -754,6 +811,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 12/side",
       priority: false,
       note: "Cable at chest height. Press straight out and return. Anti-rotation core — very safe for disc conditions.",
+      media: media.pallofPress,
     },
     {
       id: "gco9",
@@ -767,6 +825,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 20–30 sec/side",
       priority: false,
       note: "Side plank with top leg on bench. Advanced lateral core challenge.",
+      media: media.copenhagenPlank,
     },
     {
       id: "gco10",
@@ -780,6 +839,7 @@ export const gymExercises: Record<MuscleGroup, GymExercise[]> = {
       detail: "3 sets × 20–30 m",
       priority: false,
       note: "Moderate dumbbells. Spine perfectly upright throughout. Functional loaded spinal stability.",
+      media: media.farmersCarry,
     },
   ],
 };

@@ -1,4 +1,5 @@
 import type { RehabExercise } from "@/types";
+import { media } from "./media";
 
 export const rehabExercises: RehabExercise[] = [
   // ── Neck ────────────────────────────────────────────────────────
@@ -12,6 +13,7 @@ export const rehabExercises: RehabExercise[] = [
     reps: "10 × 5 sec",
     priority: true,
     note: "Most important cervical exercise. Wall gives feedback — back of head must contact wall. Builds deep cervical flexors that restore the lordotic curve.",
+    media: media.chinTuckWall,
   },
   {
     id: "rn2",
@@ -23,6 +25,7 @@ export const rehabExercises: RehabExercise[] = [
     reps: "30 sec/side",
     priority: true,
     note: "Place right fist behind back (depresses shoulder). Left hand gently tilts head to left. Stretches right scalene and upper trap — directly addresses right-side symptoms.",
+    media: media.lateralNeckStretch,
   },
   {
     id: "rn3",
@@ -34,6 +37,7 @@ export const rehabExercises: RehabExercise[] = [
     reps: "20 sec/side",
     priority: false,
     note: "Turn head 45° to one side. Look down toward armpit. Gently apply overpressure with same-side hand. Hold.",
+    media: media.levatorScapulae,
   },
   {
     id: "rn4",
@@ -45,6 +49,7 @@ export const rehabExercises: RehabExercise[] = [
     reps: "10",
     priority: false,
     note: "Back to wall, elbows bent at 90° against wall. Slowly slide arms up keeping elbows and backs of hands in contact throughout.",
+    media: media.wallSlides,
   },
   {
     id: "rn5",
@@ -56,6 +61,7 @@ export const rehabExercises: RehabExercise[] = [
     reps: "20–30 sec",
     priority: false,
     note: "Forearms on doorframe at shoulder height. Step through gently. Opens pectorals that pull shoulders forward and collapse the cervical curve.",
+    media: media.doorwayChest,
   },
   {
     id: "rn6",
@@ -67,6 +73,7 @@ export const rehabExercises: RehabExercise[] = [
     reps: "15 × 5 sec",
     priority: false,
     note: "Squeeze shoulder blades together and down. Hold. Essential postural correction — do seated or standing, multiple times daily.",
+    media: media.scapularRetraction,
   },
   {
     id: "rn7",
@@ -78,6 +85,7 @@ export const rehabExercises: RehabExercise[] = [
     reps: "10/side",
     priority: false,
     note: "Only when acute flare has settled. Slow, controlled rotation to end range. Avoid forced right rotation until right-side pain significantly improves.",
+    media: media.cervicalRotation,
   },
   {
     id: "rn8",
@@ -89,6 +97,7 @@ export const rehabExercises: RehabExercise[] = [
     reps: "10",
     priority: false,
     note: "Master basic chin tuck for 4+ weeks first. Perform chin tuck, then add slight upward gaze. Begins active restoration of cervical lordosis — McKenzie approach.",
+    media: media.chinTuckExtension,
   },
 
   // ── Shoulder ────────────────────────────────────────────────────
@@ -102,6 +111,7 @@ export const rehabExercises: RehabExercise[] = [
     reps: "15–20",
     priority: true,
     note: "Cable at eye height, rope attachment. Pull toward face with elbows flared high. Hands finish beside ears. Light weight — form first. Do every single session without exception.",
+    media: media.facePulls,
   },
   {
     id: "rs2",
@@ -113,6 +123,7 @@ export const rehabExercises: RehabExercise[] = [
     reps: "15",
     priority: true,
     note: "Reverse pec deck or bent-over DB (light). Arms slightly bent, lead with elbows, squeeze at top. Fixes the muscle imbalance driving your cervical and shoulder symptoms.",
+    media: media.rearDeltFlyes,
   },
   {
     id: "rs3",
@@ -124,6 +135,7 @@ export const rehabExercises: RehabExercise[] = [
     reps: "10 each shape",
     priority: true,
     note: "Face-down on incline bench (30–45°). 2–3 kg only. Y = arms above head diagonally. T = arms straight out to sides. W = elbows bent, thumbs pointing back. Slow and deliberate.",
+    media: media.ytwRaises,
   },
   {
     id: "rs4",
@@ -135,6 +147,7 @@ export const rehabExercises: RehabExercise[] = [
     reps: "20",
     priority: true,
     note: "Light band at shoulder height, arms straight. Pull apart to full extension. Direct correction for forward shoulder posture. Do daily — no equipment needed.",
+    media: media.bandPullAparts,
   },
   {
     id: "rs5",
@@ -146,6 +159,7 @@ export const rehabExercises: RehabExercise[] = [
     reps: "15",
     priority: true,
     note: "Side-lying with DB or cable at elbow height. Elbow fixed at 90° against side. Rotate forearm upward only. 2–3 kg. C5 nerve root recovery depends on this exercise.",
+    media: media.externalRotation,
   },
   {
     id: "rs6",
@@ -157,6 +171,7 @@ export const rehabExercises: RehabExercise[] = [
     reps: "12 × 5 sec",
     priority: false,
     note: "Low cable, both handles, straight arms. Without bending elbows, squeeze shoulder blades together. Hold each rep 3–5 sec. Scapular stability foundation.",
+    media: media.scapularRetraction,
   },
   {
     id: "rs7",
@@ -168,6 +183,7 @@ export const rehabExercises: RehabExercise[] = [
     reps: "15",
     priority: false,
     note: "Slight forward lean, slight elbow bend. Raise to shoulder height. Don't shrug — if you're shrugging, the weight is too heavy. Zero cervical loading.",
+    media: media.lateralRaises,
   },
 
   // ── Lower Back ──────────────────────────────────────────────────
@@ -181,6 +197,7 @@ export const rehabExercises: RehabExercise[] = [
     reps: "10 × 10 sec",
     priority: true,
     note: "Start on Sphinx. Extension pushes disc material anteriorly, away from nerve roots (McKenzie principle). Progress to full Cobra when Sphinx is comfortable.",
+    media: media.cobra,
   },
   {
     id: "rlb2",
@@ -192,6 +209,7 @@ export const rehabExercises: RehabExercise[] = [
     reps: "15",
     priority: true,
     note: "Pillow between knees (activates glute medius). Drive through heels, squeeze glutes at top. Hold 2 sec. If you feel it in lower back, glutes aren't firing — reduce range.",
+    media: media.gluteBridge,
   },
   {
     id: "rlb3",
@@ -203,6 +221,7 @@ export const rehabExercises: RehabExercise[] = [
     reps: "10/side",
     priority: true,
     note: "Hands and knees. Extend opposite arm and leg simultaneously. Hold 5 sec. Return slowly. Multifidus activation with near-zero intradiscal pressure. Do daily.",
+    media: media.birdDog,
   },
   {
     id: "rlb4",
@@ -212,6 +231,7 @@ export const rehabExercises: RehabExercise[] = [
     detail: "15 slow cycles",
     priority: false,
     note: "Best exercise for morning stiffness. Promotes disc nutrition through movement. Do immediately after waking.",
+    media: media.catCow,
   },
   {
     id: "rlb5",
@@ -221,6 +241,7 @@ export const rehabExercises: RehabExercise[] = [
     detail: "30–60 sec",
     priority: false,
     note: "After cobra. Gentle lumbar flexion and decompression. Always counterbalance extension exercises with this.",
+    media: media.childPose,
   },
   {
     id: "rlb6",
@@ -232,6 +253,7 @@ export const rehabExercises: RehabExercise[] = [
     reps: "15",
     priority: false,
     note: "Lying on back, knees bent. Gently press lower back into floor. Hold 3 sec. Foundational L5-S1 mobility exercise.",
+    media: media.pelvicTilt,
   },
   {
     id: "rlb7",
@@ -241,6 +263,7 @@ export const rehabExercises: RehabExercise[] = [
     detail: "30–45 sec/side · 2× daily",
     priority: true,
     note: "Low lunge. Shift hips forward until stretch at front of back hip. Tight hip flexors directly increase L5-S1 compression. Critical — do twice daily.",
+    media: media.hipFlexor,
   },
   {
     id: "rlb8",
@@ -250,5 +273,6 @@ export const rehabExercises: RehabExercise[] = [
     detail: "10–15 min",
     priority: false,
     note: "Lie on back, legs up on sofa with hips and knees at 90°. Complete L5-S1 unloading. Use every morning and after prolonged sitting.",
+    media: media.decompression9090,
   },
 ];

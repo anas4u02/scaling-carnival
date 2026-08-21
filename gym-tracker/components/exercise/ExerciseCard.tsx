@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ChevronDown, ChevronUp, Star } from "lucide-react";
 import { CheckCircle } from "@/components/ui/CheckCircle";
+import { ExerciseMediaBlock } from "@/components/exercise/ExerciseMediaBlock";
 import type { ExerciseCardProps, GymExercise } from "@/types";
 
 export function ExerciseCard({
@@ -80,14 +81,14 @@ export function ExerciseCard({
           </div>
         </div>
 
-        {exercise.note && (
+        {(exercise.note || exercise.media) && (
           <button
             onClick={handleExpand}
             id={`expand-${exercise.id}`}
             className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-colors ${
               isExpanded ? "bg-gray-600" : "bg-gray-700 hover:bg-gray-600"
             }`}
-            aria-label={isExpanded ? "Collapse note" : "Expand note"}
+            aria-label={isExpanded ? "Collapse details" : "Expand details"}
           >
             {isExpanded ? (
               <ChevronUp size={12} className="text-gray-300" />
@@ -98,12 +99,17 @@ export function ExerciseCard({
         )}
       </div>
 
-      {/* Expanded note */}
-      {isExpanded && exercise.note && (
+      {/* Expanded note + form media */}
+      {isExpanded && (exercise.note || exercise.media) && (
         <div className="px-3 pb-3">
-          <div className="text-xs text-gray-400 bg-gray-900/60 rounded-lg p-2.5 leading-relaxed border border-gray-700/30">
-            {exercise.note}
-          </div>
+          {exercise.note && (
+            <div className="text-xs text-gray-400 bg-gray-900/60 rounded-lg p-2.5 leading-relaxed border border-gray-700/30">
+              {exercise.note}
+            </div>
+          )}
+          {exercise.media && (
+            <ExerciseMediaBlock media={exercise.media} title={exercise.name} />
+          )}
         </div>
       )}
     </div>

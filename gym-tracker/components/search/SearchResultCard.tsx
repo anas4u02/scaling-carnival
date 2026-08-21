@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { AnyExercise, DontItem } from "@/types";
 import { CheckCircle } from "@/components/ui/CheckCircle";
 import { Badge } from "@/components/ui/Badge";
+import { ExerciseMediaBlock } from "@/components/exercise/ExerciseMediaBlock";
 import { AlertTriangle, ChevronDown, ChevronUp, ShieldAlert } from "lucide-react";
 
 export type SearchResultItem =
@@ -83,19 +84,22 @@ export function SearchResultCard({ item, onToggleExercise }: SearchResultCardPro
               </p>
             )}
 
-            {exercise.note && (
+            {(exercise.note || exercise.media) && (
               <button
                 onClick={() => setExpanded(!expanded)}
                 className="flex items-center gap-1 text-[11px] text-gray-400 hover:text-gray-200 mt-2 font-medium"
               >
-                <span>{expanded ? "Hide Note" : "Show Note"}</span>
+                <span>{expanded ? "Hide details" : "Show details"}</span>
                 {expanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
               </button>
             )}
 
-            {expanded && exercise.note && (
+            {expanded && (exercise.note || exercise.media) && (
               <div className="mt-2 p-2.5 rounded-xl bg-gray-950/80 border border-gray-800 text-xs text-gray-300 leading-relaxed">
                 {exercise.note}
+                {exercise.media && (
+                  <ExerciseMediaBlock media={exercise.media} title={exercise.name} />
+                )}
               </div>
             )}
           </div>

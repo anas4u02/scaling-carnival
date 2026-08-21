@@ -19,12 +19,34 @@ export type DontSeverity = "permanent" | "phaseBased" | "positions";
 
 export type ExerciseCategory = "daily" | "rehab" | "gym";
 
+export type MediaSource =
+  | "askdoctorjo"
+  | "athleanx"
+  | "muscleandstrength"
+  | "other";
+
+/** Optional clip / still shown when the exercise accordion opens. */
+export interface ExerciseMedia {
+  /** YouTube video ID — embed loads only after the user taps play. */
+  youtubeId?: string;
+  /** Start offset in seconds for compilation videos. */
+  youtubeStart?: number;
+  /** Local still or GIF under /public, e.g. "/media/dm2.webp" (works offline). */
+  image?: string;
+  source: MediaSource;
+  /** Attribution URL (usually the YouTube watch page). */
+  sourceUrl: string;
+  /** Optional form-guide page (e.g. Muscle & Strength exercise entry). */
+  guideUrl?: string;
+}
+
 // Base exercise — all exercises share this shape
 export interface BaseExercise {
   id: string;
   name: string;
   priority: boolean;
   note: string;
+  media?: ExerciseMedia;
 }
 
 // Daily exercises (morning / throughout / evening)
@@ -141,4 +163,9 @@ export interface InfoBannerProps {
   variant: "warning" | "danger" | "info";
   title: string;
   message?: string;
+}
+
+export interface ExerciseMediaBlockProps {
+  media: ExerciseMedia;
+  title: string;
 }

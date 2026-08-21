@@ -1,4 +1,5 @@
 import type { DailyExercise } from "@/types";
+import { media } from "./media";
 
 export const dailyExercises: DailyExercise[] = [
   // ── Morning ─────────────────────────────────────────────────────
@@ -10,6 +11,7 @@ export const dailyExercises: DailyExercise[] = [
     detail: "10 min",
     priority: false,
     note: "Lie on back, legs on sofa at 90°. Hips and knees both at 90°. Unloads L5-S1 completely before standing.",
+    media: media.decompression9090,
   },
   {
     id: "dm2",
@@ -19,6 +21,7 @@ export const dailyExercises: DailyExercise[] = [
     detail: "10 × 5 sec",
     priority: true,
     note: "Lying flat, gently draw chin straight back. Activates deep cervical flexors without gravity loading.",
+    media: media.chinTuckLying,
   },
   {
     id: "dm3",
@@ -28,6 +31,7 @@ export const dailyExercises: DailyExercise[] = [
     detail: "3 × 15",
     priority: false,
     note: "Knees bent, feet flat. Gently press lower back into bed. Hold 3 sec. Foundational L5-S1 mobiliser.",
+    media: media.pelvicTilt,
   },
   {
     id: "dm4",
@@ -37,6 +41,7 @@ export const dailyExercises: DailyExercise[] = [
     detail: "15 slow cycles",
     priority: false,
     note: "Hands and knees. Round spine up (cat), drop belly down (cow). Promotes disc nutrition. Best for morning stiffness.",
+    media: media.catCow,
   },
   {
     id: "dm5",
@@ -46,6 +51,7 @@ export const dailyExercises: DailyExercise[] = [
     detail: "3 × 10 sec hold",
     priority: true,
     note: "Start on Sphinx (forearms on ground, elbows under shoulders). Progress to full Cobra when comfortable. Stop if leg pain appears.",
+    media: media.cobra,
   },
 
   // ── Throughout the Day ──────────────────────────────────────────
@@ -57,6 +63,7 @@ export const dailyExercises: DailyExercise[] = [
     detail: "10 × 5 sec · Every 2h",
     priority: true,
     note: "Stand with back to wall. Draw chin back — back of head moves toward wall. No tilting up or down.",
+    media: media.chinTuckWall,
   },
   {
     id: "dt2",
@@ -66,6 +73,7 @@ export const dailyExercises: DailyExercise[] = [
     detail: "15 × 5 sec · Every 2h",
     priority: true,
     note: "Squeeze shoulder blades together and slightly down. Hold. Release. Do seated or standing.",
+    media: media.scapularRetraction,
   },
   {
     id: "dt3",
@@ -75,6 +83,7 @@ export const dailyExercises: DailyExercise[] = [
     detail: "2 min · Every 30–40 min",
     priority: false,
     note: "Stand, do 5 cat-cows or chin tucks, walk briefly. Resets intradiscal pressure back to baseline.",
+    media: media.sittingBreak,
   },
   {
     id: "dt4",
@@ -84,6 +93,7 @@ export const dailyExercises: DailyExercise[] = [
     detail: "30–45 sec/side · 2× daily",
     priority: true,
     note: "Low lunge. Shift hips forward. Feel stretch at front of back hip. Tight hip flexors = direct L5-S1 compression. Critical for desk workers.",
+    media: media.hipFlexor,
   },
 
   // ── Evening ─────────────────────────────────────────────────────
@@ -95,6 +105,7 @@ export const dailyExercises: DailyExercise[] = [
     detail: "60–90 sec",
     priority: true,
     note: "Rolled towel placed horizontally across mid-upper back at D3-D4 level (behind shoulder blades). Arms crossed over chest. Let gravity extend thoracic spine over roll.",
+    media: media.thoracicExtension,
   },
   {
     id: "de2",
@@ -104,6 +115,7 @@ export const dailyExercises: DailyExercise[] = [
     detail: "60 sec",
     priority: false,
     note: "Sit back on heels, stretch arms forward. Gentle lumbar flexion and decompression. Always do after Cobra to balance the spine.",
+    media: media.childPose,
   },
   {
     id: "de3",
@@ -113,5 +125,6 @@ export const dailyExercises: DailyExercise[] = [
     detail: "3 × 20",
     priority: false,
     note: "Light resistance band at shoulder height, arms straight. Pull apart to full extension. Postural correction before sleep.",
+    media: media.bandPullAparts,
   },
 ];
