@@ -113,6 +113,35 @@ export interface HistoryStore {
   getLast7Days: () => { date: string; count: number; label: string }[];
 }
 
+export interface WaterEntry {
+  id: string;
+  ml: number;
+  at: string;
+}
+
+export interface WaterStore {
+  goalMl: number;
+  logs: Record<string, WaterEntry[]>;
+  addSip: (date: string, ml?: number) => void;
+  undoLast: (date: string) => void;
+  getIntake: (date: string) => number;
+}
+
+export interface SettingsStore {
+  waterReminders: boolean;
+  morningReminder: boolean;
+  streakReminder: boolean;
+  lastWaterReminderKey: string | null;
+  lastMorningReminderDate: string | null;
+  lastStreakReminderDate: string | null;
+  setWaterReminders: (on: boolean) => void;
+  setMorningReminder: (on: boolean) => void;
+  setStreakReminder: (on: boolean) => void;
+  markWaterReminder: (key: string) => void;
+  markMorningReminder: (date: string) => void;
+  markStreakReminder: (date: string) => void;
+}
+
 // ─── Component Prop Types ─────────────────────────────────────────
 
 export interface ExerciseCardProps {
@@ -168,4 +197,9 @@ export interface InfoBannerProps {
 export interface ExerciseMediaBlockProps {
   media: ExerciseMedia;
   title: string;
+}
+
+export interface WaterBottleProps {
+  intakeMl: number;
+  goalMl: number;
 }

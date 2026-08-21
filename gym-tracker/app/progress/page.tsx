@@ -6,6 +6,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { StreakCard } from "@/components/progress/StreakCard";
 import { WeeklyChart } from "@/components/progress/WeeklyChart";
 import { DontsList } from "@/components/progress/DontsList";
+import { NotificationSettings } from "@/components/notifications/NotificationSettings";
 import { useExerciseStore, usePhaseStore, useHistoryStore } from "@/store";
 import { dailyExercises } from "@/data";
 import { getTodayKey } from "@/lib/dateUtils";
@@ -35,6 +36,10 @@ export default function ProgressPage() {
       <StreakCard streak={streak} todayCount={todayDoneCount} phase={currentPhase} />
 
       <WeeklyChart days={last7Days} />
+
+      <div className="mb-4">
+        <NotificationSettings />
+      </div>
 
       <DontsList />
     </PageWrapper>

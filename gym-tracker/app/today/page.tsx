@@ -10,7 +10,8 @@ import { ExerciseList } from "@/components/exercise/ExerciseList";
 import { dailyExercises } from "@/data";
 import { useExerciseStore, usePhaseStore } from "@/store";
 import { getTodayKey, formatDisplayDate } from "@/lib/dateUtils";
-import type { DailySection, DailyExercise } from "@/types";
+import type { DailySection } from "@/types";
+import { WaterGlance } from "@/components/water/WaterGlance";
 
 export default function TodayPage() {
   const todayKey = useMemo(() => getTodayKey(), []);
@@ -59,6 +60,8 @@ export default function TodayPage() {
       <div className="mb-6">
         <ProgressBar done={totalDone} total={dailyExercises.length} phase={currentPhase} />
       </div>
+
+      <WaterGlance />
 
       <div className="mb-6">
         <InfoBanner
