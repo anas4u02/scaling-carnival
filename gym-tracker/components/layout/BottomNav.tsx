@@ -2,17 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Calendar, Dumbbell, Search, Activity, TrendingUp, Droplets } from "lucide-react";
+import { Calendar, Dumbbell, Activity, TrendingUp, Droplets } from "lucide-react";
 
 export function BottomNav() {
   const pathname = usePathname();
 
   const navItems = [
     { href: "/today", label: "Today", icon: Calendar },
-    { href: "/water", label: "Water", icon: Droplets },
     { href: "/gym", label: "Gym", icon: Dumbbell },
+    { href: "/water", label: "Water", icon: Droplets },
     { href: "/rehab", label: "Rehab", icon: Activity },
-    { href: "/search", label: "Search", icon: Search },
     { href: "/progress", label: "Progress", icon: TrendingUp },
   ];
 
@@ -26,14 +25,14 @@ export function BottomNav() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center justify-center flex-1 min-w-0 py-1.5 transition-colors ${
+              className={`flex flex-col items-center justify-center flex-1 py-1.5 transition-colors ${
                 isActive
                   ? "text-blue-400 font-medium"
                   : "text-gray-400 hover:text-gray-200"
               }`}
             >
-              <Icon className={`w-[18px] h-[18px] mb-0.5 ${isActive ? "scale-110" : ""}`} />
-              <span className="text-[10px] leading-none truncate w-full text-center">{item.label}</span>
+              <Icon className={`w-5 h-5 mb-0.5 ${isActive ? "scale-110" : ""}`} />
+              <span className="text-[11px]">{item.label}</span>
             </Link>
           );
         })}

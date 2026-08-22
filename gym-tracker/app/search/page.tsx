@@ -63,6 +63,7 @@ export default function SearchPage() {
       <PageHeader
         title="Search & Safety"
         subtitle="Search routine exercises or safety rules"
+        showSearch={false}
       />
 
       <SearchBar value={query} onChange={setQuery} />
