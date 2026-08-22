@@ -26,7 +26,8 @@ export async function requestNotificationPermission(): Promise<NotificationPermi
 export async function showAppNotification(payload: NotifyPayload): Promise<void> {
   if (!notificationsSupported() || Notification.permission !== "granted") return;
 
-  const options: NotificationOptions = {
+  // `renotify` is in the Notifications spec for service workers, but not on DOM's NotificationOptions.
+  const options: NotificationOptions & { renotify: boolean } = {
     body: payload.body,
     icon: ICON,
     badge: ICON,
