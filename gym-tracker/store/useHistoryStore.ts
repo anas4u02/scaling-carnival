@@ -2,17 +2,30 @@
 
 import { format, subDays } from "date-fns";
 import { useExerciseStore } from "./useExerciseStore";
+import { useHistoryCacheStore } from "./useHistoryCacheStore";
+import { localPersistRange } from "@/lib/periodUtils";
 
-// History is derived from exercise logs — not stored separately.
 export function useHistoryStore() {
   const logs = useExerciseStore((s) => s.logs);
+  const cacheCounts = useHistoryCacheStore((s) => s.exerciseCounts);
+  const loadedDates = useHistoryCacheStore((s) => s.loadedDates);
 
   const getStreak = (): number => {
+    const persist = localPersistRange();
     let streak = 0;
     let d = new Date();
     for (let i = 0; i < 365; i++) {
       const key = format(d, "yyyy-MM-dd");
-      const count = Object.values(logs[key] ?? {}).filter(Boolean).length;
+      let count: number;
+      if (key >= persist.startKey && key <= persist.endKey) {
+        count = Object.values(logs[key] ?? {}).filter(Boolean).length;
+      } else if (loadedDates[key]) {
+        count = cacheCounts[key] ?? 0;
+      } else if (logs[key]) {
+        count = Object.values(logs[key]).filter(Boolean).length;
+      } else {
+        break;
+      }
       if (count > 0) {
         streak++;
         d = subDays(d, 1);
@@ -23,15 +36,5 @@ export function useHistoryStore() {
     return streak;
   };
 
-  const getLast7Days = (): { date: string; count: number; label: string }[] => {
-    const dayLabels = ["S", "M", "T", "W", "T", "F", "S"];
-    return Array.from({ length: 7 }, (_, i) => {
-      const d = subDays(new Date(), 6 - i);
-      const date = format(d, "yyyy-MM-dd");
-      const count = Object.values(logs[date] ?? {}).filter(Boolean).length;
-      return { date, count, label: dayLabels[d.getDay()] };
-    });
-  };
-
-  return { getStreak, getLast7Days };
+  return { getStreak };
 }

@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { NotificationScheduler } from "@/components/notifications/NotificationScheduler";
+import { CloudSync } from "@/components/sync/CloudSync";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -37,6 +38,7 @@ export default function RootLayout({
           {children}
         </main>
         <NotificationScheduler />
+        <CloudSync />
         <BottomNav />
       </body>
     </html>

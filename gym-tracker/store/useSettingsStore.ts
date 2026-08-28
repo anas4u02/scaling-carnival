@@ -19,6 +19,7 @@ export const useSettingsStore = create<SettingsStore>()(
       markWaterReminder: (key) => set({ lastWaterReminderKey: key }),
       markMorningReminder: (date) => set({ lastMorningReminderDate: date }),
       markStreakReminder: (date) => set({ lastStreakReminderDate: date }),
+      hydrateReminders: (prefs) => set(prefs),
     }),
     { name: "gym-tracker-settings" }
   )

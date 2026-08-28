@@ -4,6 +4,8 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { WaterEntry, WaterStore } from "@/types";
 import { WATER_GOAL_ML, WATER_SIP_ML } from "@/lib/waterUtils";
+import { getCloudOwnerId } from "@/lib/sync/owner";
+import { localPersistRange, pickKeyRange } from "@/lib/periodUtils";
 
 export const useWaterStore = create<WaterStore>()(
   persist(
@@ -12,7 +14,7 @@ export const useWaterStore = create<WaterStore>()(
       logs: {},
       addSip: (date, ml = WATER_SIP_ML) => {
         const entry: WaterEntry = {
-          id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+          id: crypto.randomUUID(),
           ml,
           at: new Date().toISOString(),
         };
@@ -38,7 +40,20 @@ export const useWaterStore = create<WaterStore>()(
         const entries = get().logs[date] ?? [];
         return entries.reduce((sum, entry) => sum + entry.ml, 0);
       },
+      hydrate: (goalMl, logs) => set({ goalMl, logs }),
     }),
-    { name: "gym-tracker-water" }
+    {
+      name: "gym-tracker-water",
+      partialize: (state) => {
+        if (!getCloudOwnerId()) {
+          return { goalMl: state.goalMl, logs: state.logs };
+        }
+        const { startKey, endKey } = localPersistRange();
+        return {
+          goalMl: state.goalMl,
+          logs: pickKeyRange(state.logs, startKey, endKey),
+        };
+      },
+    }
   )
 );

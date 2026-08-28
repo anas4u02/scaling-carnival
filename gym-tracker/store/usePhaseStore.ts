@@ -9,6 +9,7 @@ export const usePhaseStore = create<PhaseStore>()(
     (set) => ({
       currentPhase: 1,
       setPhase: (phase) => set({ currentPhase: phase }),
+      hydrate: (phase) => set({ currentPhase: phase }),
     }),
     { name: "gym-tracker-phase" }
   )

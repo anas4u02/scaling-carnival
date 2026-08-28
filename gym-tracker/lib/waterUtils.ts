@@ -1,3 +1,6 @@
+import { format, subDays } from "date-fns";
+import type { WaterDayPoint, WaterEntry } from "@/types";
+
 /** 250 ml is a standard glass / sip size. */
 export const WATER_SIP_ML = 250;
 
@@ -70,4 +73,43 @@ export function nextMorningReminderAt(now: Date): Date {
     slot.setDate(slot.getDate() + 1);
   }
   return slot;
+}
+
+export function compactLiters(ml: number): string {
+  if (ml <= 0) return "";
+  const n = ml / 1000;
+  if (ml % 1000 === 0) return String(n);
+  if (ml % 100 === 0) return n.toFixed(1);
+  return n.toFixed(2).replace(/0$/, "");
+}
+
+export function getWaterDaysForWeek(
+  logs: Record<string, WaterEntry[]>,
+  dateKeys: string[],
+  todayKey: string
+): WaterDayPoint[] {
+  const dayLabels = ["S", "M", "T", "W", "T", "F", "S"];
+  return dateKeys.map((date) => {
+    const d = new Date(`${date}T00:00:00`);
+    const ml = (logs[date] ?? []).reduce((sum, entry) => sum + entry.ml, 0);
+    return {
+      date,
+      ml: date > todayKey ? 0 : ml,
+      label: dayLabels[d.getDay()],
+      isFuture: date > todayKey,
+    };
+  });
+}
+
+export function getLast7WaterDays(
+  logs: Record<string, WaterEntry[]>,
+  now = new Date()
+): WaterDayPoint[] {
+  const dayLabels = ["S", "M", "T", "W", "T", "F", "S"];
+  return Array.from({ length: 7 }, (_, i) => {
+    const d = subDays(now, 6 - i);
+    const date = format(d, "yyyy-MM-dd");
+    const ml = (logs[date] ?? []).reduce((sum, entry) => sum + entry.ml, 0);
+    return { date, ml, label: dayLabels[d.getDay()] };
+  });
 }

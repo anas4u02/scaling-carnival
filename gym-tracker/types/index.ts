@@ -101,16 +101,17 @@ export interface ExerciseStore {
   toggle: (exerciseId: string, date: string) => void;
   getLog: (date: string) => CompletionMap;
   clearDay: (date: string) => void;
+  hydrate: (logs: Record<string, CompletionMap>) => void;
 }
 
 export interface PhaseStore {
   currentPhase: PhaseNumber;
   setPhase: (phase: PhaseNumber) => void;
+  hydrate: (phase: PhaseNumber) => void;
 }
 
 export interface HistoryStore {
   getStreak: () => number;
-  getLast7Days: () => { date: string; count: number; label: string }[];
 }
 
 export interface WaterEntry {
@@ -125,6 +126,21 @@ export interface WaterStore {
   addSip: (date: string, ml?: number) => void;
   undoLast: (date: string) => void;
   getIntake: (date: string) => number;
+  hydrate: (goalMl: number, logs: Record<string, WaterEntry[]>) => void;
+}
+
+export interface WaterDayPoint {
+  date: string;
+  ml: number;
+  label: string;
+  isFuture?: boolean;
+}
+
+export interface WaterWeeklyChartProps {
+  days: WaterDayPoint[];
+  goalMl: number;
+  todayKey: string;
+  title?: string;
 }
 
 export interface SettingsStore {
@@ -140,6 +156,40 @@ export interface SettingsStore {
   markWaterReminder: (key: string) => void;
   markMorningReminder: (date: string) => void;
   markStreakReminder: (date: string) => void;
+  hydrateReminders: (prefs: {
+    waterReminders: boolean;
+    morningReminder: boolean;
+    streakReminder: boolean;
+  }) => void;
+}
+
+export type Gender = "male" | "female" | "other";
+
+export interface ProfileStore {
+  displayName: string;
+  ageYears: number | null;
+  gender: Gender | null;
+  setDisplayName: (name: string) => void;
+  setAgeYears: (age: number | null) => void;
+  setGender: (gender: Gender | null) => void;
+  hydrateProfile: (profile: {
+    displayName: string;
+    ageYears: number | null;
+    gender: Gender | null;
+  }) => void;
+}
+
+export type CloudSyncStatus =
+  | "signed-out"
+  | "syncing"
+  | "synced"
+  | "error";
+
+export interface CloudSyncState {
+  status: CloudSyncStatus;
+  email: string | null;
+  error: string | null;
+  lastSyncedAt: string | null;
 }
 
 // ─── Component Prop Types ─────────────────────────────────────────

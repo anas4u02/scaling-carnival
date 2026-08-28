@@ -16,6 +16,7 @@ import {
   isWaterGoalMet,
   remainingMl,
 } from "@/lib/waterUtils";
+import { WaterHistory } from "@/components/water/WaterHistory";
 
 export default function WaterPage() {
   const [todayKey, setTodayKey] = useState(getTodayKey);
@@ -105,6 +106,8 @@ export default function WaterPage() {
           </ul>
         )}
       </section>
+
+      <WaterHistory />
     </PageWrapper>
   );
 }

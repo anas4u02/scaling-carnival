@@ -7,6 +7,10 @@ import { Calendar, Dumbbell, Activity, TrendingUp, Droplets } from "lucide-react
 export function BottomNav() {
   const pathname = usePathname();
 
+  if (pathname === "/login" || pathname.startsWith("/auth")) {
+    return null;
+  }
+
   const navItems = [
     { href: "/today", label: "Today", icon: Calendar },
     { href: "/gym", label: "Gym", icon: Dumbbell },

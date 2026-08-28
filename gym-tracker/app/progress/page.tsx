@@ -4,21 +4,25 @@ import { useMemo } from "react";
 import { PageWrapper } from "@/components/layout/PageWrapper";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { StreakCard } from "@/components/progress/StreakCard";
-import { WeeklyChart } from "@/components/progress/WeeklyChart";
 import { DontsList } from "@/components/progress/DontsList";
 import { NotificationSettings } from "@/components/notifications/NotificationSettings";
+import { ProgressMetrics } from "@/components/progress/ProgressMetrics";
 import { useExerciseStore, usePhaseStore, useHistoryStore } from "@/store";
-import { dailyExercises } from "@/data";
+import { useHistoryCacheStore } from "@/store/useHistoryCacheStore";
 import { getTodayKey } from "@/lib/dateUtils";
 
 export default function ProgressPage() {
   const currentPhase = usePhaseStore((s) => s.currentPhase);
   const logs = useExerciseStore((s) => s.logs);
-  const { getStreak, getLast7Days } = useHistoryStore();
+  const cacheCounts = useHistoryCacheStore((s) => s.exerciseCounts);
+  const loadedDates = useHistoryCacheStore((s) => s.loadedDates);
+  const { getStreak } = useHistoryStore();
 
   const todayKey = useMemo(() => getTodayKey(), []);
-  const streak = useMemo(() => getStreak(), [logs]);
-  const last7Days = useMemo(() => getLast7Days(), [logs]);
+  const streak = useMemo(
+    () => getStreak(),
+    [logs, cacheCounts, loadedDates, getStreak]
+  );
 
   const todayDoneCount = useMemo(() => {
     const todayLogs = logs[todayKey] ?? {};
@@ -35,7 +39,7 @@ export default function ProgressPage() {
 
       <StreakCard streak={streak} todayCount={todayDoneCount} phase={currentPhase} />
 
-      <WeeklyChart days={last7Days} />
+      <ProgressMetrics />
 
       <div className="mb-4">
         <NotificationSettings />
