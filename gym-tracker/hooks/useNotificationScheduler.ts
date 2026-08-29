@@ -10,6 +10,7 @@ import {
   streakReminderPayload,
   waterReminderPayload,
 } from "@/lib/notifications";
+import { whenStoresHydrated } from "@/lib/sync/cloudSync";
 import {
   MORNING_REMINDER_HOUR,
   dueWaterHour,
@@ -23,33 +24,16 @@ import { useSettingsStore } from "@/store/useSettingsStore";
 import { useWaterStore } from "@/store/useWaterStore";
 
 const MAX_WAIT_MS = 60 * 60 * 1000;
+const POLL_MS = 60 * 1000;
+const HYDRATE_TIMEOUT_MS = 2500;
 
 function waitForPersistHydration(): Promise<void> {
-  const waitStore = (
-    hasHydrated: () => boolean,
-    onFinish: (cb: () => void) => () => void
-  ) =>
+  return Promise.race([
+    whenStoresHydrated(),
     new Promise<void>((resolve) => {
-      if (hasHydrated()) {
-        resolve();
-        return;
-      }
-      const unsub = onFinish(() => {
-        unsub();
-        resolve();
-      });
-    });
-
-  return Promise.all([
-    waitStore(
-      () => useWaterStore.persist.hasHydrated(),
-      (cb) => useWaterStore.persist.onFinishHydration(cb)
-    ),
-    waitStore(
-      () => useSettingsStore.persist.hasHydrated(),
-      (cb) => useSettingsStore.persist.onFinishHydration(cb)
-    ),
-  ]).then(() => undefined);
+      window.setTimeout(resolve, HYDRATE_TIMEOUT_MS);
+    }),
+  ]);
 }
 
 async function fireDueNotifications(now: Date): Promise<Date> {
@@ -79,7 +63,9 @@ async function fireDueNotifications(now: Date): Promise<Date> {
   if (settings.morningReminder && now.getHours() >= MORNING_REMINDER_HOUR) {
     if (settings.lastMorningReminderDate !== dateKey) {
       const log = useExerciseStore.getState().logs[dateKey] ?? {};
-      const morningLeft = dailyExercises.some((ex) => !log[ex.id]);
+      const morningLeft = dailyExercises
+        .filter((ex) => ex.section === "morning")
+        .some((ex) => !log[ex.id]);
       if (morningLeft) {
         await showAppNotification(morningReminderPayload());
       }
@@ -118,6 +104,7 @@ function nextWakeAt(now: Date, waterGoalMet: boolean): Date {
 
 export function useNotificationScheduler(): void {
   const timerRef = useRef<number | null>(null);
+  const pollRef = useRef<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -131,7 +118,10 @@ export function useNotificationScheduler(): void {
 
     const arm = (wake: Date) => {
       clearTimer();
-      const delay = Math.min(MAX_WAIT_MS, Math.max(250, wake.getTime() - Date.now()));
+      const delay = Math.min(
+        MAX_WAIT_MS,
+        Math.max(250, wake.getTime() - Date.now())
+      );
       timerRef.current = window.setTimeout(run, delay);
     };
 
@@ -146,15 +136,20 @@ export function useNotificationScheduler(): void {
 
     void run();
 
+    pollRef.current = window.setInterval(() => {
+      void run();
+    }, POLL_MS);
+
     const onVisible = () => {
       if (document.visibilityState === "visible") void run();
     };
-
-    document.addEventListener("visibilitychange", onVisible);
-    const onReschedule = () => {
+    const onFocus = () => {
       void run();
     };
-    window.addEventListener("gymtracker:reschedule", onReschedule);
+
+    document.addEventListener("visibilitychange", onVisible);
+    window.addEventListener("focus", onFocus);
+    window.addEventListener("gymtracker:reschedule", onFocus);
 
     let prevWaterFlags = `${useSettingsStore.getState().waterReminders}|${useSettingsStore.getState().morningReminder}|${useSettingsStore.getState().streakReminder}`;
     const unsubSettings = useSettingsStore.subscribe((s) => {
@@ -171,8 +166,13 @@ export function useNotificationScheduler(): void {
     return () => {
       cancelled = true;
       clearTimer();
+      if (pollRef.current !== null) {
+        window.clearInterval(pollRef.current);
+        pollRef.current = null;
+      }
       document.removeEventListener("visibilitychange", onVisible);
-      window.removeEventListener("gymtracker:reschedule", onReschedule);
+      window.removeEventListener("focus", onFocus);
+      window.removeEventListener("gymtracker:reschedule", onFocus);
       unsubWater();
       unsubSettings();
     };

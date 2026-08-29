@@ -1,12 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Bell, BellOff } from "lucide-react";
 import {
   notificationPermission,
   requestNotificationPermission,
+  showAppNotification,
+  subscribeToWebPush,
+  testReminderPayload,
 } from "@/lib/notifications";
+import { isIosDevice, isStandalonePwa } from "@/lib/push/platform";
 import { useSettingsStore } from "@/store/useSettingsStore";
+import { useSyncStore } from "@/store/useSyncStore";
 
 function Toggle({
   checked,
@@ -54,7 +61,15 @@ function Toggle({
 }
 
 export function NotificationSettings() {
-  const [permission, setPermission] = useState(notificationPermission);
+  const pathname = usePathname();
+  const [permission, setPermission] = useState<
+    NotificationPermission | "unsupported"
+  >("default");
+  const [iosStandalone, setIosStandalone] = useState(false);
+  const [iosDevice, setIosDevice] = useState(false);
+  const [pushReady, setPushReady] = useState(false);
+  const [testState, setTestState] = useState<"idle" | "sent" | "error">("idle");
+  const signedIn = useSyncStore((s) => s.status !== "signed-out");
   const waterReminders = useSettingsStore((s) => s.waterReminders);
   const morningReminder = useSettingsStore((s) => s.morningReminder);
   const streakReminder = useSettingsStore((s) => s.streakReminder);
@@ -62,15 +77,41 @@ export function NotificationSettings() {
   const setMorningReminder = useSettingsStore((s) => s.setMorningReminder);
   const setStreakReminder = useSettingsStore((s) => s.setStreakReminder);
 
+  useEffect(() => {
+    setIosDevice(isIosDevice());
+    setIosStandalone(isStandalonePwa());
+    setPermission(notificationPermission());
+  }, []);
+
+  useEffect(() => {
+    if (permission !== "granted" || !signedIn) return;
+    void subscribeToWebPush()
+      .then((ok) => setPushReady(ok))
+      .catch(() => setPushReady(false));
+  }, [permission, signedIn]);
+
   const granted = permission === "granted";
   const unsupported = permission === "unsupported";
+  const loginHref = `/login?next=${encodeURIComponent(pathname || "/progress")}`;
 
   const handleEnable = async () => {
     const result = await requestNotificationPermission();
     setPermission(result);
-    if (result === "granted") {
-      window.dispatchEvent(new Event("gymtracker:reschedule"));
+    if (result !== "granted") return;
+    window.dispatchEvent(new Event("gymtracker:reschedule"));
+    await showAppNotification(testReminderPayload());
+    if (signedIn) {
+      try {
+        setPushReady(await subscribeToWebPush());
+      } catch {
+        setPushReady(false);
+      }
     }
+  };
+
+  const handleTest = async () => {
+    const ok = await showAppNotification(testReminderPayload());
+    setTestState(ok ? "sent" : "error");
   };
 
   return (
@@ -86,21 +127,44 @@ export function NotificationSettings() {
         </h2>
       </div>
 
-      {unsupported && (
+      {iosDevice && !iosStandalone && (
+        <p className="text-xs text-amber-300/90 mt-2 leading-relaxed">
+          iPhone reminders only work from the Home Screen app. Open this icon
+          from your home screen (not a Safari tab), then enable reminders
+          there.
+        </p>
+      )}
+
+      {unsupported && !iosDevice && (
         <p className="text-xs text-gray-500 mt-2">
-          This browser does not support notifications. Add to Home Screen on
-          your phone for the best chance they fire.
+          This browser does not support notifications.
         </p>
       )}
 
       {permission === "denied" && (
         <p className="text-xs text-amber-400/90 mt-2 leading-relaxed">
-          Notifications are blocked. Enable them in the browser site settings,
-          then reload.
+          Notifications are blocked. On iPhone: Settings → Notifications →
+          GymTracker, then reopen the Home Screen app.
         </p>
       )}
 
-      {permission === "default" && (
+      {granted && iosStandalone && !signedIn && (
+        <p className="text-xs text-amber-300/90 mt-2 leading-relaxed">
+          iPhone suspends the app when you leave it.{" "}
+          <Link href={loginHref} className="text-sky-400 underline">
+            Sign in
+          </Link>{" "}
+          so water and morning pings can arrive after you close GymTracker.
+        </p>
+      )}
+
+      {granted && signedIn && pushReady && (
+        <p className="text-xs text-emerald-400/80 mt-2 leading-relaxed">
+          This iPhone will get reminders even after you leave the app.
+        </p>
+      )}
+
+      {permission === "default" && (!iosDevice || iosStandalone) && (
         <button
           type="button"
           onClick={() => void handleEnable()}
@@ -134,9 +198,24 @@ export function NotificationSettings() {
         />
       </div>
 
+      {granted && (
+        <button
+          type="button"
+          onClick={() => void handleTest()}
+          className="mt-3 w-full rounded-xl border border-gray-700 bg-gray-800 hover:bg-gray-700 text-gray-200 text-sm font-medium py-2.5 transition-colors"
+        >
+          {testState === "sent"
+            ? "Test sent — check your notifications"
+            : testState === "error"
+              ? "Could not send test"
+              : "Send test notification"}
+        </button>
+      )}
+
       <p className="text-[10px] text-gray-600 mt-2 leading-snug">
-        Reminders fire while the app is open or recently used. Install as a PWA
-        and keep it in the app switcher for the 2-hour water pings.
+        On iPhone, closed-app reminders need the Home Screen app, notification
+        permission, and a signed-in account. Android and desktop can also ping
+        while GymTracker stays in the app switcher.
       </p>
     </section>
   );
