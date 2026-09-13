@@ -88,12 +88,34 @@ function configureWebPush(): boolean {
 }
 
 function serviceClient(): SupabaseClient {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
   if (!url || !key) {
     throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY");
   }
-  return createClient(url, key, { auth: { persistSession: false } });
+  // New secret keys are not JWTs. Sending them as Authorization: Bearer
+  // makes PostgREST return Invalid JWT.
+  const apikeyOnly = key.startsWith("sb_secret_") || key.startsWith("sb_publishable_");
+  return createClient(url, key, {
+    auth: { persistSession: false, autoRefreshToken: false },
+    global: {
+      fetch: async (input, init) => {
+        const headers = new Headers(init?.headers);
+        headers.set("apikey", key);
+        if (apikeyOnly) {
+          headers.delete("Authorization");
+        } else if (!headers.has("Authorization")) {
+          headers.set("Authorization", `Bearer ${key}`);
+        }
+        return fetch(input, { ...init, headers });
+      },
+    },
+  });
+}
+
+function supabaseMessage(label: string, err: { message?: string; code?: string; details?: string }) {
+  const parts = [label, err.message, err.code, err.details].filter(Boolean);
+  return parts.join(": ");
 }
 
 async function sendPush(sub: SubRow, payload: NotifyPayload): Promise<boolean> {
@@ -121,7 +143,13 @@ async function sendPush(sub: SubRow, payload: NotifyPayload): Promise<boolean> {
   } catch (err) {
     const status = (err as { statusCode?: number }).statusCode;
     if (status === 404 || status === 410) return false;
-    throw err;
+    const message = err instanceof Error ? err.message : String(err);
+    const body = (err as { body?: string }).body;
+    throw new Error(
+      [`web-push ${status ?? "error"}`, message, typeof body === "string" ? body.slice(0, 200) : ""]
+        .filter(Boolean)
+        .join(": ")
+    );
   }
 }
 
@@ -137,8 +165,8 @@ export async function sendDueReminders(): Promise<{ sent: number; gone: number }
       ),
       supabase.from("push_subscriptions").select("endpoint, p256dh, auth, time_zone, user_id"),
     ]);
-  if (profileError) throw profileError;
-  if (subError) throw subError;
+  if (profileError) throw new Error(supabaseMessage("profiles", profileError));
+  if (subError) throw new Error(supabaseMessage("push_subscriptions", subError));
 
   const profileById = new Map<string, ProfileRow>(
     ((profiles ?? []) as ProfileRow[]).map((row) => [row.id, row])
