@@ -47,7 +47,6 @@ export function useHistoryPeriod(options?: { includeStreakLookback?: boolean }) 
     if (view === "week" && weekOffset > 0 && weekKeys[0] && weekKeys[6]) {
       ranges.push({ startKey: weekKeys[0], endKey: weekKeys[6] });
     }
-    if (includeStreakLookback) ranges.push(lookback);
 
     let from = ranges[0].startKey;
     let to = ranges[0].endKey;
@@ -56,6 +55,12 @@ export function useHistoryPeriod(options?: { includeStreakLookback?: boolean }) 
       if (range.endKey > to) to = range.endKey;
     }
     void ensureRange(from, to);
+
+    if (!includeStreakLookback) return;
+    const idle = window.setTimeout(() => {
+      void ensureRange(lookback.startKey, lookback.endKey);
+    }, 1500);
+    return () => window.clearTimeout(idle);
   }, [
     ensureRange,
     includeStreakLookback,

@@ -599,6 +599,14 @@ export async function syncOnSignIn(
   supabase: SupabaseClient
 ): Promise<void> {
   const owner = getCloudOwnerId();
+
+  // Returning visitor: keep local data and let write-through push. Skip the
+  // extra COUNT queries that were blocking every signed-in launch.
+  if (owner === userId) {
+    pruneStoresToPersistRange();
+    return;
+  }
+
   const hasCloud = await cloudHasRows(supabase);
 
   if (owner && owner !== userId) {
@@ -606,11 +614,9 @@ export async function syncOnSignIn(
     await pullFromCloud(userId, supabase);
   } else if (!hasCloud && localHasUserData()) {
     await uploadLocalSnapshot(userId, supabase);
-  } else if (hasCloud && owner !== userId) {
+  } else if (hasCloud) {
     await pullFromCloud(userId, supabase);
   }
-  // Same owner: keep local (offline edits) and let write-through push.
-  // Trim memory/localStorage to this week after older rows are in the cloud.
 
   setCloudOwnerId(userId);
   pruneStoresToPersistRange();

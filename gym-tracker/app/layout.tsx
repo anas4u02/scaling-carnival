@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { NotificationScheduler } from "@/components/notifications/NotificationScheduler";
+import { ServiceWorkerRegister } from "@/components/sync/ServiceWorkerRegister";
 import { CloudSync } from "@/components/sync/CloudSync";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -44,6 +45,7 @@ export default function RootLayout({
         <main className="min-h-screen">
           {children}
         </main>
+        <ServiceWorkerRegister />
         <NotificationScheduler />
         <CloudSync />
         <BottomNav />

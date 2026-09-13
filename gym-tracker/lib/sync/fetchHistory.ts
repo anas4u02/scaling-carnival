@@ -11,9 +11,9 @@ export async function fetchMetricsRange(
 ): Promise<DayMetrics | null> {
   const supabase = createClient();
   const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return null;
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session?.user) return null;
 
   const [logsRes, sipsRes] = await Promise.all([
     supabase

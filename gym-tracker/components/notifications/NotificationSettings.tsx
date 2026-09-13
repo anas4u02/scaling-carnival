@@ -68,6 +68,7 @@ export function NotificationSettings() {
   const [iosStandalone, setIosStandalone] = useState(false);
   const [iosDevice, setIosDevice] = useState(false);
   const [pushReady, setPushReady] = useState(false);
+  const [pushError, setPushError] = useState<string | null>(null);
   const [testState, setTestState] = useState<"idle" | "sent" | "error">("idle");
   const signedIn = useSyncStore((s) => s.status !== "signed-out");
   const waterReminders = useSettingsStore((s) => s.waterReminders);
@@ -86,8 +87,14 @@ export function NotificationSettings() {
   useEffect(() => {
     if (permission !== "granted" || !signedIn) return;
     void subscribeToWebPush()
-      .then((ok) => setPushReady(ok))
-      .catch(() => setPushReady(false));
+      .then((ok) => {
+        setPushReady(ok);
+        setPushError(ok ? null : "Sign in to keep reminders after you leave the app.");
+      })
+      .catch((err) => {
+        setPushReady(false);
+        setPushError(err instanceof Error ? err.message : "Could not enable closed-app reminders.");
+      });
   }, [permission, signedIn]);
 
   const granted = permission === "granted";
@@ -103,8 +110,12 @@ export function NotificationSettings() {
     if (signedIn) {
       try {
         setPushReady(await subscribeToWebPush());
-      } catch {
+        setPushError(null);
+      } catch (err) {
         setPushReady(false);
+        setPushError(
+          err instanceof Error ? err.message : "Could not enable closed-app reminders."
+        );
       }
     }
   };
@@ -162,6 +173,10 @@ export function NotificationSettings() {
         <p className="text-xs text-emerald-400/80 mt-2 leading-relaxed">
           This iPhone will get reminders even after you leave the app.
         </p>
+      )}
+
+      {granted && pushError && (
+        <p className="text-xs text-amber-300/90 mt-2 leading-relaxed">{pushError}</p>
       )}
 
       {permission === "default" && (!iosDevice || iosStandalone) && (

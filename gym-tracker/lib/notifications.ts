@@ -1,4 +1,5 @@
 import { createClient } from "@/utils/supabase/client";
+import { ensurePushWorker } from "@/components/sync/ServiceWorkerRegister";
 import { isIosDevice, isStandalonePwa, urlBase64ToUint8Array } from "@/lib/push/platform";
 import type { NotifyPayload } from "@/lib/notifications/payloads";
 
@@ -11,7 +12,6 @@ export {
 } from "@/lib/notifications/payloads";
 
 const ICON = "/icon-192.png";
-const READY_TIMEOUT_MS = 8000;
 
 export function notificationsSupported(): boolean {
   if (typeof window === "undefined") return false;
@@ -29,27 +29,6 @@ export async function requestNotificationPermission(): Promise<
 > {
   if (!notificationsSupported()) return "unsupported";
   return Notification.requestPermission();
-}
-
-async function registrationForNotify(): Promise<ServiceWorkerRegistration | null> {
-  if (typeof navigator === "undefined" || !("serviceWorker" in navigator)) {
-    return null;
-  }
-
-  try {
-    const existing = await navigator.serviceWorker.getRegistration();
-    if (existing?.active) return existing;
-
-    const ready = await Promise.race([
-      navigator.serviceWorker.ready,
-      new Promise<null>((resolve) => {
-        window.setTimeout(() => resolve(null), READY_TIMEOUT_MS);
-      }),
-    ]);
-    return ready?.active ? ready : existing?.active ? existing : null;
-  } catch {
-    return null;
-  }
 }
 
 function notificationOptions(payload: NotifyPayload): NotificationOptions & {
@@ -71,7 +50,7 @@ export async function showAppNotification(payload: NotifyPayload): Promise<boole
   }
 
   const options = notificationOptions(payload);
-  const registration = await registrationForNotify();
+  const registration = await ensurePushWorker();
 
   if (registration?.showNotification) {
     try {
@@ -103,10 +82,15 @@ export async function showAppNotification(payload: NotifyPayload): Promise<boole
 
 export async function subscribeToWebPush(): Promise<boolean> {
   const vapid = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
-  if (!vapid || notificationPermission() !== "granted") return false;
+  if (!vapid) {
+    throw new Error("Push keys are not configured on this deploy.");
+  }
+  if (notificationPermission() !== "granted") return false;
 
-  const registration = await registrationForNotify();
-  if (!registration?.pushManager) return false;
+  const registration = await ensurePushWorker();
+  if (!registration?.pushManager) {
+    throw new Error("Could not register the notification worker.");
+  }
 
   const existing = await registration.pushManager.getSubscription();
   const subscription =
@@ -121,8 +105,9 @@ export async function subscribeToWebPush(): Promise<boolean> {
 
   const supabase = createClient();
   const {
-    data: { user },
-  } = await supabase.auth.getUser();
+    data: { session },
+  } = await supabase.auth.getSession();
+  const user = session?.user;
   if (!user) return false;
 
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
