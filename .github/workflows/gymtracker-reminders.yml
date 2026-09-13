@@ -19,6 +19,17 @@ jobs:
             echo "Skipping: set the CRON_SECRET repository secret."
             exit 0
           fi
-          curl -fsS -X POST \
+          url="${APP_URL%/}/api/cron/reminders"
+          code=$(curl -sS -o /tmp/cron-body -w "%{http_code}" -X POST \
             -H "Authorization: Bearer ${CRON_SECRET}" \
-            "${APP_URL%/}/api/cron/reminders"
+            "$url")
+          if [ "$code" = "404" ]; then
+            echo "Cron route missing at $url. Vercel production is stale or the last deploy failed."
+            exit 1
+          fi
+          if [ "$code" != "200" ]; then
+            echo "Cron failed HTTP $code"
+            cat /tmp/cron-body
+            exit 1
+          fi
+          cat /tmp/cron-body
