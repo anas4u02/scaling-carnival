@@ -99,6 +99,7 @@ export type HistoryMap = Record<string, number>;
 export interface ExerciseStore {
   logs: Record<string, CompletionMap>;
   toggle: (exerciseId: string, date: string) => void;
+  complete: (exerciseId: string, date: string) => void;
   getLog: (date: string) => CompletionMap;
   clearDay: (date: string) => void;
   hydrate: (logs: Record<string, CompletionMap>) => void;
@@ -252,4 +253,72 @@ export interface ExerciseMediaBlockProps {
 export interface WaterBottleProps {
   intakeMl: number;
   goalMl: number;
+}
+
+// ─── Workout sessions ─────────────────────────────────────────────
+
+export type SessionMode = "morning" | "evening" | "gym";
+
+export type SessionUnit = "rep" | "set" | "side" | "hold";
+
+export type SessionLayer = "crucial" | "beneficial" | "gym";
+
+export type SessionSlot =
+  | "unload"
+  | "neck"
+  | "extension"
+  | "hips"
+  | "posture"
+  | "gym-prehab"
+  | "gym-push"
+  | "gym-pull"
+  | "gym-legs"
+  | "gym-core";
+
+export interface SessionCard {
+  movementId: string;
+  exerciseId: string;
+  family: string;
+  name: string;
+  note: string;
+  dose: string;
+  target: number;
+  unit: SessionUnit;
+  slot: SessionSlot;
+  layer: SessionLayer;
+}
+
+export interface SessionExerciseResult {
+  movementId: string;
+  exerciseId: string;
+  family: string;
+  name: string;
+  dose: string;
+  target: number;
+  unit: SessionUnit;
+  done: number;
+  skipped: boolean;
+  completed: boolean;
+}
+
+export interface ActiveSession {
+  id: string;
+  date: string;
+  mode: SessionMode;
+  phase: PhaseNumber;
+  startedAt: string;
+  cards: SessionCard[];
+  index: number;
+  results: SessionExerciseResult[];
+}
+
+export interface SessionRecord {
+  id: string;
+  date: string;
+  mode: SessionMode;
+  phase: PhaseNumber;
+  startedAt: string;
+  endedAt: string;
+  status: "completed" | "partial";
+  exercises: SessionExerciseResult[];
 }

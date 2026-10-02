@@ -22,6 +22,16 @@ export const useExerciseStore = create<ExerciseStore>()(
           },
         });
       },
+      complete: (exerciseId, date) => {
+        const currentLog = get().logs[date] ?? {};
+        if (currentLog[exerciseId]) return;
+        set({
+          logs: {
+            ...get().logs,
+            [date]: { ...currentLog, [exerciseId]: true },
+          },
+        });
+      },
       getLog: (date) => get().logs[date] ?? {},
       clearDay: (date) => {
         const { [date]: _, ...rest } = get().logs;

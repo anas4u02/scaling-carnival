@@ -1,4 +1,5 @@
 export { useExerciseStore } from "./useExerciseStore";
+export { useSessionStore } from "./useSessionStore";
 export { usePhaseStore } from "./usePhaseStore";
 export { useHistoryStore } from "./useHistoryStore";
 export { useWaterStore } from "./useWaterStore";

@@ -7,7 +7,7 @@ import { Calendar, Dumbbell, Activity, TrendingUp, Droplets } from "lucide-react
 export function BottomNav() {
   const pathname = usePathname();
 
-  if (pathname === "/login" || pathname.startsWith("/auth")) {
+  if (pathname === "/login" || pathname.startsWith("/auth") || pathname.startsWith("/session")) {
     return null;
   }
 
