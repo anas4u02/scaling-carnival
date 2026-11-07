@@ -137,7 +137,9 @@ async function sendPush(sub: SubRow, payload: NotifyPayload): Promise<boolean> {
         endpoint: sub.endpoint,
         keys: { p256dh: sub.p256dh, auth: sub.auth },
       },
-      body
+      body,
+      // iOS defers "normal" pushes for hours. High urgency is what makes them show.
+      { TTL: 12 * 60 * 60, urgency: "high" }
     );
     return true;
   } catch (err) {

@@ -19,11 +19,9 @@ export async function ensurePushWorker(): Promise<ServiceWorkerRegistration | nu
     return null;
   }
   try {
-    const existing = await navigator.serviceWorker.getRegistration("/");
-    if (existing?.active && existing.active.scriptURL.includes("push-sw.js")) {
-      return existing;
-    }
-    return await navigator.serviceWorker.register(SW_URL, { scope: "/" });
+    const registration = await navigator.serviceWorker.register(SW_URL, { scope: "/" });
+    await registration.update().catch(() => undefined);
+    return await navigator.serviceWorker.ready;
   } catch {
     return null;
   }

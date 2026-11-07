@@ -11,7 +11,7 @@ import {
   subscribeToWebPush,
   testReminderPayload,
 } from "@/lib/notifications";
-import { isIosDevice, isStandalonePwa } from "@/lib/push/platform";
+import { isAndroidDevice, isIosDevice, isStandalonePwa } from "@/lib/push/platform";
 import { useSettingsStore } from "@/store/useSettingsStore";
 import { useSyncStore } from "@/store/useSyncStore";
 
@@ -67,7 +67,9 @@ export function NotificationSettings() {
   >("default");
   const [iosStandalone, setIosStandalone] = useState(false);
   const [iosDevice, setIosDevice] = useState(false);
+  const [androidDevice, setAndroidDevice] = useState(false);
   const [pushReady, setPushReady] = useState(false);
+  const [pushChecked, setPushChecked] = useState(false);
   const [pushError, setPushError] = useState<string | null>(null);
   const [testState, setTestState] = useState<"idle" | "sent" | "error">("idle");
   const signedIn = useSyncStore((s) => s.status !== "signed-out");
@@ -80,26 +82,55 @@ export function NotificationSettings() {
 
   useEffect(() => {
     setIosDevice(isIosDevice());
+    setAndroidDevice(isAndroidDevice());
     setIosStandalone(isStandalonePwa());
     setPermission(notificationPermission());
   }, []);
 
   useEffect(() => {
     if (permission !== "granted" || !signedIn) return;
+    let cancelled = false;
     void subscribeToWebPush()
       .then((ok) => {
+        if (cancelled) return;
         setPushReady(ok);
         setPushError(ok ? null : "Sign in to keep reminders after you leave the app.");
       })
       .catch((err) => {
+        if (cancelled) return;
         setPushReady(false);
-        setPushError(err instanceof Error ? err.message : "Could not enable closed-app reminders.");
+        const message = err instanceof Error ? err.message : "Could not enable closed-app reminders.";
+        const needsTap = /notallowed|gesture|user gesture/i.test(message);
+        setPushError(
+          needsTap
+            ? "Tap below once more so this phone can save reminders."
+            : message
+        );
+      })
+      .finally(() => {
+        if (!cancelled) setPushChecked(true);
       });
+    return () => {
+      cancelled = true;
+    };
   }, [permission, signedIn]);
 
   const granted = permission === "granted";
   const unsupported = permission === "unsupported";
   const loginHref = `/login?next=${encodeURIComponent(pathname || "/progress")}`;
+
+  const handleSubscribe = async () => {
+    try {
+      const ok = await subscribeToWebPush();
+      setPushReady(ok);
+      setPushError(ok ? null : "Sign in to keep reminders after you leave the app.");
+    } catch (err) {
+      setPushReady(false);
+      setPushError(
+        err instanceof Error ? err.message : "Could not enable closed-app reminders."
+      );
+    }
+  };
 
   const handleEnable = async () => {
     const result = await requestNotificationPermission();
@@ -107,17 +138,7 @@ export function NotificationSettings() {
     if (result !== "granted") return;
     window.dispatchEvent(new Event("gymtracker:reschedule"));
     await showAppNotification(testReminderPayload());
-    if (signedIn) {
-      try {
-        setPushReady(await subscribeToWebPush());
-        setPushError(null);
-      } catch (err) {
-        setPushReady(false);
-        setPushError(
-          err instanceof Error ? err.message : "Could not enable closed-app reminders."
-        );
-      }
-    }
+    if (signedIn) await handleSubscribe();
   };
 
   const handleTest = async () => {
@@ -154,14 +175,15 @@ export function NotificationSettings() {
 
       {permission === "denied" && (
         <p className="text-xs text-amber-400/90 mt-2 leading-relaxed">
-          Notifications are blocked. On iPhone: Settings → Notifications →
-          GymTracker, then reopen the Home Screen app.
+          {androidDevice
+            ? "Notifications are blocked. In Chrome, open the lock icon, set Notifications to Allow, and also check Android Settings → Apps → Chrome → Notifications."
+            : "Notifications are blocked. On iPhone: Settings → Notifications → GymTracker, then reopen the Home Screen app."}
         </p>
       )}
 
-      {granted && iosStandalone && !signedIn && (
+      {granted && (iosStandalone || androidDevice) && !signedIn && (
         <p className="text-xs text-amber-300/90 mt-2 leading-relaxed">
-          iPhone suspends the app when you leave it.{" "}
+          {androidDevice ? "Android" : "iPhone"} suspends the app when you leave it.{" "}
           <Link href={loginHref} className="text-sky-400 underline">
             Sign in
           </Link>{" "}
@@ -171,7 +193,11 @@ export function NotificationSettings() {
 
       {granted && signedIn && pushReady && (
         <p className="text-xs text-emerald-400/80 mt-2 leading-relaxed">
-          This iPhone will get reminders even after you leave the app.
+          {androidDevice
+            ? "This Android phone will get reminders even after you leave the app."
+            : iosDevice
+              ? "This iPhone will get reminders even after you leave the app."
+              : "This device will get reminders even after you leave the app."}
         </p>
       )}
 
@@ -186,6 +212,16 @@ export function NotificationSettings() {
           className="mt-3 w-full rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-sm font-medium py-2.5 transition-colors"
         >
           Enable reminders
+        </button>
+      )}
+
+      {granted && signedIn && pushChecked && !pushReady && (
+        <button
+          type="button"
+          onClick={() => void handleSubscribe()}
+          className="mt-3 w-full rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-sm font-medium py-2.5 transition-colors"
+        >
+          Turn on closed-app reminders
         </button>
       )}
 
@@ -228,9 +264,9 @@ export function NotificationSettings() {
       )}
 
       <p className="text-[10px] text-gray-600 mt-2 leading-snug">
-        On iPhone, closed-app reminders need the Home Screen app, notification
-        permission, and a signed-in account. Android and desktop can also ping
-        while GymTracker stays in the app switcher.
+        iPhone reminders need the Home Screen app, notification permission, and
+        a signed-in account. Android Chrome needs the same permission and
+        account; it can deliver after you leave the app without installing it.
       </p>
     </section>
   );

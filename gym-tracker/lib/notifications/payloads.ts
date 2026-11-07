@@ -10,7 +10,7 @@ export interface NotifyPayload {
 export function testReminderPayload(): NotifyPayload {
   return {
     title: "GymTracker reminders are on",
-    body: "You should see this ping. Closed-app reminders on iPhone need this Home Screen app plus an account.",
+    body: "You should see this ping. Closed-app reminders need a signed-in account.",
     tag: "gymtracker-test",
     url: "/progress",
   };
