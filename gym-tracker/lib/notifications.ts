@@ -31,15 +31,13 @@ export async function requestNotificationPermission(): Promise<
   return Notification.requestPermission();
 }
 
-function notificationOptions(payload: NotifyPayload): NotificationOptions & {
-  renotify: boolean;
-} {
+function notificationOptions(payload: NotifyPayload): NotificationOptions {
+  // iOS rejects showNotification when `renotify` is set, and then drops later pushes.
   return {
     body: payload.body,
     icon: ICON,
     badge: ICON,
-    tag: payload.tag,
-    renotify: true,
+    tag: `${payload.tag}-${Date.now()}`,
     data: { url: payload.url },
   };
 }
@@ -91,6 +89,7 @@ export async function subscribeToWebPush(): Promise<boolean> {
   if (!registration?.pushManager) {
     throw new Error("Could not register the notification worker.");
   }
+  await navigator.serviceWorker.ready;
 
   const existing = await registration.pushManager.getSubscription();
   const subscription =

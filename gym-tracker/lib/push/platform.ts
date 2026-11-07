@@ -9,6 +9,11 @@ export function urlBase64ToUint8Array(base64String: string): Uint8Array {
   return output;
 }
 
+export function isAndroidDevice(): boolean {
+  if (typeof navigator === "undefined") return false;
+  return /Android/i.test(navigator.userAgent);
+}
+
 export function isIosDevice(): boolean {
   if (typeof navigator === "undefined") return false;
   const ua = navigator.userAgent;

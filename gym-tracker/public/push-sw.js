@@ -29,13 +29,21 @@ self.addEventListener("push", (event) => {
     }
   }
 
+  const options = {
+    body: payload.body,
+    icon: "/icon-192.png",
+    badge: "/icon-192.png",
+    tag: payload.tag ? `${payload.tag}-${Date.now()}` : `gymtracker-${Date.now()}`,
+    data: { url: payload.url },
+  };
+
   event.waitUntil(
-    self.registration.showNotification(payload.title, {
-      body: payload.body,
-      tag: payload.tag,
-      renotify: true,
-      data: { url: payload.url },
-    })
+    self.registration.showNotification(payload.title, options).catch(() =>
+      self.registration.showNotification(payload.title, {
+        body: payload.body,
+        data: { url: payload.url },
+      })
+    )
   );
 });
 
